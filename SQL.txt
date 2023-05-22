@@ -1,0 +1,76 @@
+--Tabla Usuario
+CREATE TABLE usuario (
+  rut VARCHAR2(10) PRIMARY KEY,
+  nombre VARCHAR2(50),
+  apellido VARCHAR2(50),
+  numero VARCHAR2(15),
+  correo VARCHAR2(100),
+  pass VARCHAR2(30),
+  tipouser VARCHAR2(50)
+);
+
+--Tabla Registro
+CREATE TABLE registro (
+  idregistro NUMBER PRIMARY KEY,
+  rutusuario VARCHAR2(10),
+  fecha_ingreso TIMESTAMP(6),
+  fecha_salida TIMESTAMP(6),
+  CONSTRAINT fk_registro_usuario FOREIGN KEY (rutusuario) REFERENCES usuario(rut)
+);
+
+--Tabla Producto
+CREATE TABLE producto (
+  idproducto NUMBER PRIMARY KEY,
+  nombre VARCHAR2(50),
+  precio NUMBER(10, 2),
+  descripcion VARCHAR2(200),
+  cantidad NUMBER,
+  alerta NUMBER,
+  tipo VARCHAR2(50)
+);
+
+--Tabla Promo
+CREATE TABLE promo (
+  idpromo NUMBER PRIMARY KEY,
+  nombre VARCHAR2(50),
+  precio NUMBER(10, 2),
+  descripcion VARCHAR2(200)
+);
+
+--Tabla Detalle Promo
+CREATE TABLE detalle_promo (
+  iddetalle NUMBER PRIMARY KEY,
+  idpromo NUMBER,
+  idproducto NUMBER,
+  cantidad NUMBER,
+  CONSTRAINT fk_detalle_promo_promo FOREIGN KEY (idpromo) REFERENCES promo(idpromo),
+  CONSTRAINT fk_detalle_promo_producto FOREIGN KEY (idproducto) REFERENCES producto(idproducto)
+);
+
+--Tabla Venta
+CREATE TABLE venta (
+  idventa NUMBER PRIMARY KEY,
+  rutusuario VARCHAR2(10),
+  fecha TIMESTAMP(6),
+  total NUMBER(10, 2),
+  CONSTRAINT fk_venta_usuario FOREIGN KEY (rutusuario) REFERENCES usuario(rut)
+);
+
+--Tabla Detalle Venta
+CREATE TABLE detalle_venta (
+  iddetalleventa NUMBER PRIMARY KEY,
+  idventa NUMBER,
+  idproducto NUMBER,
+  cantidad NUMBER,
+  precio_unitario NUMBER(10, 2),
+  CONSTRAINT fk_detalle_venta_venta FOREIGN KEY (idventa) REFERENCES venta(idventa),
+  CONSTRAINT fk_detalle_venta_producto FOREIGN KEY (idproducto) REFERENCES producto(idproducto)
+);
+
+--ingresar 3 usuarios nuevos de prueba para revisar funcionalidad de login correo prueba1 2 y 3 tipo de usuario 1 administrador, 2 vendedor y 3 reponedor--
+
+INSERT INTO usuario VALUES ('111', 'Juan', 'Perez', '123456789', 'prueba1', '123', 'administrador');
+INSERT INTO usuario VALUES ('222', 'Juana', 'Pereira', '123456789', 'prueba2', '123', 'vendedor');
+INSERT INTO usuario VALUES ('333', 'Juanito', 'Peralta', '123456789', 'prueba3', '123', 'reponedor');
+
+select * from usuario;
